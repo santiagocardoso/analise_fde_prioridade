@@ -31,6 +31,8 @@ void menu_desc_movel();
 void inicializa_desc(Desc *p);
 No* inicializa_no(Info *info);
 void insere_na_fila_desc(No *no, Desc *desc);
+void remover_da_fila_desc(Desc *desc);
+void reiniciar_fila_desc(Desc *desc);
 void imprime_fila_desc(Desc *desc);
 
 void inicializa_desc_movel(Desc_movel *p);

@@ -21,6 +21,8 @@ void menu_desc() {
     printf("Escolha uma opção:\n");
     printf("[0] Sair\n");
     printf("[1] Mostrar fila\n");
+    printf("[2] Remover da fila\n");
+    printf("[3] Reiniciar fila\n");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
 
@@ -31,6 +33,8 @@ void menu_desc_movel() {
     printf("Escolha uma opção:\n");
     printf("[0] Sair\n");
     printf("[1] Mostrar fila\n");
+    printf("[2] Remover da fila\n");
+    printf("[3] Reiniciar fila\n");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
 
@@ -113,10 +117,30 @@ void insere_na_fila_desc(No *no, Desc *desc) {
     desc->tam++;
 }
 
+void remover_da_fila_desc(Desc *desc) {
+    No *aux = desc->frente;
+    desc->frente = desc->frente->antes;
+    free(aux);
+}
+
+void reiniciar_fila_desc(Desc *desc) {
+    No *aux = desc->frente;
+    while (aux) {
+        desc->frente = desc->frente->antes;
+        free(aux);
+        aux = desc->frente;
+    }
+}
+
 void imprime_fila_desc(Desc *desc) {
     No *aux = desc->frente;
     while (aux) {
         printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
         aux = aux->antes;
     }
+    /*No *aux = desc->cauda;
+    while (aux) {
+        printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
+        aux = aux->proximo;
+    }*/
 }

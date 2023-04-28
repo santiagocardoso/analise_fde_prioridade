@@ -40,6 +40,12 @@ int main(int argc, char **argv) {
                         case 1:
                             imprime_fila_desc(desc);
                             break;
+                        case 2:
+                            remover_da_fila_desc(desc);
+                            break;
+                        case 3:
+                            reiniciar_fila_desc(desc);
+                            break;
                         default:
                             printf("Opcao invalida!\n");
                             break;
