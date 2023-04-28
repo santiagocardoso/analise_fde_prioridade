@@ -1,6 +1,6 @@
 typedef struct info {
-    char *nome;
-    char *curso;
+    char nome[20];
+    char curso[20];
     int matricula;
     int rank;
 } Info;
@@ -12,15 +12,14 @@ typedef struct no {
 } No;
 
 typedef struct desc_movel {
-    int tam_lista;
-    int tam_info;
+    int tam;
     No *cauda;
     No *frente;
     No *ref_movel;
 } Desc_movel;
 
 typedef struct desc {
-    int tam_info;
+    int tam;
     No *cauda;
     No *frente;
 } Desc;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "fde.h"
 
@@ -35,14 +36,13 @@ void menu_desc_movel() {
 }
 
 void inicializa_desc(Desc *p) {
-    p->tam_info = 0;
+    p->tam = 0;
     p->cauda = NULL;
     p->frente = NULL;
 }
 
 void inicializa_desc_movel(Desc_movel *p) {
-    p->tam_info = 0;
-    p->tam_lista = 0;
+    p->tam = 0;
     p->cauda = NULL;
     p->frente = NULL;
     p->ref_movel = NULL;
@@ -68,10 +68,10 @@ void le_arquivo_desc(FILE *arquivo, Desc *desc) {
         char *curso = (char*) malloc(30);
         sscanf(linha, " %[^,],%d,%d, %[^'\n']", nome, &matricula, &rank, curso);
 
-        info->nome = nome;
+        strcpy(info->nome, nome);
         info->matricula = matricula;
         info->rank = rank;
-        info->curso = curso;
+        strcpy(info->curso, curso);
 
         free(nome);
         free(curso);
@@ -85,18 +85,17 @@ void le_arquivo_desc(FILE *arquivo, Desc *desc) {
 }
 
 void insere_na_fila_desc(No *no, Desc *desc) {
-    // descritor nomal
     if (!desc->cauda && !desc->frente) {
         desc->cauda = no;
         desc->frente = no;
-        desc->tam_info++;
+        desc->tam++;
     }
     else {
         No *aux = desc->cauda;
         desc->cauda = no;
         no->proximo = aux;
         aux->antes = no;
-        desc->tam_info++;
+        desc->tam++;
     }
 }
 
