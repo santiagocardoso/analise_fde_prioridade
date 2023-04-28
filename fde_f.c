@@ -85,26 +85,38 @@ void insere_na_fila_desc(No *no, Desc *desc) {
     if (!desc->cauda && !desc->frente) {
         desc->cauda = no;
         desc->frente = no;
-        desc->tam++;
     }
-    else { // implementar fila de prioridade
+    else {
         No *aux = desc->cauda;
-        desc->cauda = no;
-        no->proximo = aux;
-        aux->antes = no;
-        desc->tam++;
+        
+        while (aux && aux->data->rank < no->data->rank)
+            aux = aux->proximo;
+
+        if (!aux) {
+            no->antes = desc->frente;
+            desc->frente->proximo = no;
+            desc->frente = no;
+        }
+        else if (!aux->antes) {
+            no->proximo = aux;
+            aux->antes = no;
+            desc->cauda = no;
+        }
+        else {
+            no->proximo = aux;
+            no->antes = aux->antes;
+            aux->antes->proximo = no;
+            aux->antes = no;
+        }
     }
+
+    desc->tam++;
 }
 
 void imprime_fila_desc(Desc *desc) {
-    /*No *aux = desc->frente;
+    No *aux = desc->frente;
     while (aux) {
         printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
         aux = aux->antes;
-    }*/
-    No *aux = desc->cauda;
-    while (aux) {
-        printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
-        aux = aux->proximo;
     }
 }
