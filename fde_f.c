@@ -3,6 +3,37 @@
 #include <time.h>
 #include "fde.h"
 
+void menu() {
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("           ANALISE DE DESEMPENHO\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("Escolha uma opção:\n");
+    printf("[0] Sair\n");
+    printf("[1] Gerar FDE-Prioridade sem referencia movel\n");
+    printf("[2] Gerar FDE-Prioridade com referencia movel\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+}
+
+void menu_desc() {
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("          DESCRITOR SEM REF MOVEL\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("Escolha uma opção:\n");
+    printf("[0] Sair\n");
+    printf("[1] Mostrar fila\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+}
+
+void menu_desc_movel() {
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("          DESCRITOR COM REF MOVEL\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("Escolha uma opção:\n");
+    printf("[0] Sair\n");
+    printf("[1] Mostrar fila\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+}
+
 void inicializa_desc(Desc *p) {
     p->tam_info = 0;
     p->cauda = NULL;
@@ -19,12 +50,13 @@ void inicializa_desc_movel(Desc_movel *p) {
 
 No* inicializa_no(Info *info) {
     No *novo = (No*) malloc(sizeof(No));
-    novo->data = *info;
+    novo->data = info;
     novo->proximo = NULL;
+    novo->antes = NULL;
     return novo;
 }
 
-void le_arquivo(FILE *arquivo) {
+void le_arquivo_desc(FILE *arquivo, Desc *desc) {
     char linha[256];
     fgets(linha, sizeof(linha), arquivo);
     while (fgets(linha, sizeof(linha), arquivo)) {
@@ -47,5 +79,36 @@ void le_arquivo(FILE *arquivo) {
         rank = 0;
 
         No *no = inicializa_no(info);
+
+        insere_na_fila_desc(no, desc);
+    }
+}
+
+void insere_na_fila_desc(No *no, Desc *desc) {
+    // descritor nomal
+    if (!desc->cauda && !desc->frente) {
+        desc->cauda = no;
+        desc->frente = no;
+        desc->tam_info++;
+    }
+    else {
+        No *aux = desc->cauda;
+        desc->cauda = no;
+        no->proximo = aux;
+        aux->antes = no;
+        desc->tam_info++;
+    }
+}
+
+void imprime_fila_desc(Desc *desc) {
+    /*No *aux = desc->frente;
+    while (aux) {
+        printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
+        aux = aux->antes;
+    }*/
+    No *aux = desc->cauda;
+    while (aux) {
+        printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
+        aux = aux->proximo;
     }
 }
