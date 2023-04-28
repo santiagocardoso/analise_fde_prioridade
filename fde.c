@@ -23,7 +23,12 @@ int main(int argc, char **argv) {
             case 1:
                 Desc *desc = (Desc*) malloc(sizeof(Desc));
                 inicializa_desc(desc);
-                le_arquivo_desc(arquivo, desc);
+
+                Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
+                inicializa_desc_movel(desc_movel);
+
+                le_arquivo_desc(arquivo, desc, desc_movel);
+
                 int opcao = -1;
                 while (opcao != 0) {
                     menu_desc();
@@ -40,10 +45,6 @@ int main(int argc, char **argv) {
                             break;
                     }
                 }
-                break;
-            case 2:
-                Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
-                inicializa_desc_movel(desc_movel);
                 break;
             default:
                 printf("Opcao invalida!\n");

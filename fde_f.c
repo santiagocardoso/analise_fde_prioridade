@@ -10,8 +10,7 @@ void menu() {
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
     printf("Escolha uma opção:\n");
     printf("[0] Sair\n");
-    printf("[1] Gerar FDE-Prioridade sem referencia movel\n");
-    printf("[2] Gerar FDE-Prioridade com referencia movel\n");
+    printf("[1] Gerar FDE-Prioridade s/n referencia movel\n");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
 
@@ -56,7 +55,7 @@ No* inicializa_no(Info *info) {
     return novo;
 }
 
-void le_arquivo_desc(FILE *arquivo, Desc *desc) {
+void le_arquivo_desc(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
     char linha[256];
     fgets(linha, sizeof(linha), arquivo);
     while (fgets(linha, sizeof(linha), arquivo)) {
@@ -75,8 +74,6 @@ void le_arquivo_desc(FILE *arquivo, Desc *desc) {
 
         free(nome);
         free(curso);
-        matricula = 0;
-        rank = 0;
 
         No *no = inicializa_no(info);
 
@@ -90,7 +87,7 @@ void insere_na_fila_desc(No *no, Desc *desc) {
         desc->frente = no;
         desc->tam++;
     }
-    else {
+    else { // implementar fila de prioridade
         No *aux = desc->cauda;
         desc->cauda = no;
         no->proximo = aux;
