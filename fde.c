@@ -5,13 +5,6 @@
 #include "fde.h"
 
 int main(int argc, char **argv) {
-    FILE *arquivo = fopen("dataset_v1.csv", "r");
-
-    if (!arquivo) {
-        printf("ERROR!\n");
-        return 0;
-    }
-
     int opcao = -1;
     while (opcao != 0) {
         menu();
@@ -21,13 +14,21 @@ int main(int argc, char **argv) {
                 printf("Saindo...\n");
                 break;
             case 1:
+                FILE *arquivo = fopen("dataset_v1.csv", "r");
+
+                if (!arquivo) {
+                    printf("ERROR!\n");
+                    return 0;
+                }
+
                 Desc *desc = (Desc*) malloc(sizeof(Desc));
                 inicializa_desc(desc);
 
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo_desc(arquivo, desc, desc_movel);
+                le_arquivo_desc(arquivo, desc);
+                le_arquivo_desc_movel(arquivo, desc_movel); 
 
                 int opcao = -1;
                 while (opcao != 0) {
@@ -44,21 +45,25 @@ int main(int argc, char **argv) {
                             remover_da_fila_desc(desc);
                             break;
                         case 3:
-                            reiniciar_fila_desc(desc);
+                            imprime_fila_desc_movel(desc_movel);
+                            break;
+                        case 4:
+                            remover_da_fila_desc_movel(desc_movel);
                             break;
                         default:
                             printf("Opcao invalida!\n");
                             break;
                     }
                 }
+                free(desc);
+                free(desc_movel);
+                fclose(arquivo);
                 break;
             default:
                 printf("Opcao invalida!\n");
                 break;
         }
     }
-
-    fclose(arquivo);
 
     return 0;
 }
