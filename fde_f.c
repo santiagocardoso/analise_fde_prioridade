@@ -52,7 +52,7 @@ int rank(No *no) {
     return no->data->rank;
 }
 
-void le_arquivo(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
+void le_arquivoZ(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
     char linha[256];
     fgets(linha, sizeof(linha), arquivo);
     while (fgets(linha, sizeof(linha), arquivo)) {
