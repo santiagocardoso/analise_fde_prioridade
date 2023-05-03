@@ -14,9 +14,16 @@ int main(int argc, char **argv) {
                 printf("Saindo...\n");
                 break;
             case 1:
-                FILE *arquivo = fopen("dataset_v1.csv", "r");
+                FILE *arquivo1 = fopen("dataset_v1.csv", "r");
 
-                if (!arquivo) {
+                if (!arquivo1) {
+                    printf("ERROR!\n");
+                    return 0;
+                }
+
+                FILE *arquivo2 = fopen("dataset_v1.csv", "r");
+
+                if (!arquivo2) {
                     printf("ERROR!\n");
                     return 0;
                 }
@@ -27,7 +34,8 @@ int main(int argc, char **argv) {
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo(arquivo, desc, desc_movel);
+                le_arquivo_desc(arquivo1, desc);
+                le_arquivo_desc_movel(arquivo2, desc_movel);
 
                 int opcao = -1;
                 while (opcao != 0) {
@@ -56,7 +64,8 @@ int main(int argc, char **argv) {
                 }
                 free(desc);
                 free(desc_movel);
-                fclose(arquivo);
+                fclose(arquivo1);
+                fclose(arquivo2);
                 break;
             default:
                 printf("Opcao invalida!\n");

@@ -52,7 +52,8 @@ int rank(No *no) {
     return no->data->rank;
 }
 
-void le_arquivoZ(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
+// descritor sem referencia movel
+void le_arquivo_desc(FILE *arquivo, Desc *desc) {
     char linha[256];
     fgets(linha, sizeof(linha), arquivo);
     while (fgets(linha, sizeof(linha), arquivo)) {
@@ -75,7 +76,6 @@ void le_arquivoZ(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
         No *no = inicializa_no(info);
 
         insere_na_fila_desc(no, desc);
-        insere_na_fila_desc_movel(no, desc_movel);
     }
 }
 
@@ -133,12 +133,39 @@ void imprime_fila_desc(Desc *desc) {
     }
 }
 
+// descritor com referencia movel
+void le_arquivo_desc_movel(FILE *arquivo, Desc_movel *desc_movel) {
+    char linha[256];
+    fgets(linha, sizeof(linha), arquivo);
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        Info *info = (Info*) malloc(sizeof(Info));
+
+        char *nome = (char*) malloc(30);
+        int matricula;
+        int rank;
+        char *curso = (char*) malloc(30);
+        sscanf(linha, " %[^,],%d,%d, %[^'\n']", nome, &matricula, &rank, curso);
+
+        strcpy(info->nome, nome);
+        info->matricula = matricula;
+        info->rank = rank;
+        strcpy(info->curso, curso);
+
+        free(nome);
+        free(curso);
+
+        No *no = inicializa_no(info);
+
+        insere_na_fila_desc_movel(no, desc_movel);
+    }
+}
+
 void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
     if (!desc_movel->cauda && !desc_movel->frente) {
         desc_movel->cauda = no;
         desc_movel->frente = no;
         desc_movel->ref_movel = no;
-    }/*
+    }
     else {
         if (rank(no) <= rank(desc_movel->cauda)) {
             no->proximo = desc_movel->cauda;
@@ -172,7 +199,7 @@ void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
             aux->antes->proximo = no;
             aux->antes = no;
         }
-    }*/
+    }
 
     desc_movel->tam++;
 }
