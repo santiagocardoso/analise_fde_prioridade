@@ -33,6 +33,8 @@ No* inicializa_no(Info *info);
 
 int rank(No *no);
 
+void le_arquivo(FILE *arquivo, Desc *desc, Desc_movel *desc_movel);
+
 void insere_na_fila_desc(No *no, Desc *desc);
 void remover_da_fila_desc(Desc *desc);
 void imprime_fila_desc(Desc *desc);
@@ -40,6 +42,3 @@ void imprime_fila_desc(Desc *desc);
 void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel);
 void remover_da_fila_desc_movel(Desc_movel *desc_movel);
 void imprime_fila_desc_movel(Desc_movel *desc_movel);
-
-void le_arquivo_desc(FILE *arquivo, Desc *desc);
-void le_arquivo_desc_movel(FILE *arquivo, Desc_movel *desc_movel);

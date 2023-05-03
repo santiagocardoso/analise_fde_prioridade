@@ -21,8 +21,8 @@ void menu_desc() {
     printf("Escolha uma opção:\n");
     printf("[0] Sair\n");
     printf("[1] Mostrar fila\n");
-    printf("[2] Mostrar fila movel\n");
-    printf("[3] Remover da fila\n");
+    printf("[2] Remover da fila\n");
+    printf("[3] Mostrar fila movel\n");
     printf("[4] Remover da fila movel\n");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
@@ -52,7 +52,7 @@ int rank(No *no) {
     return no->data->rank;
 }
 
-void le_arquivo_desc(FILE *arquivo, Desc *desc) {
+void le_arquivo(FILE *arquivo, Desc *desc, Desc_movel *desc_movel) {
     char linha[256];
     fgets(linha, sizeof(linha), arquivo);
     while (fgets(linha, sizeof(linha), arquivo)) {
@@ -75,6 +75,7 @@ void le_arquivo_desc(FILE *arquivo, Desc *desc) {
         No *no = inicializa_no(info);
 
         insere_na_fila_desc(no, desc);
+        insere_na_fila_desc_movel(no, desc_movel);
     }
 }
 
@@ -132,61 +133,46 @@ void imprime_fila_desc(Desc *desc) {
     }
 }
 
-void le_arquivo_desc_movel(FILE *arquivo, Desc_movel *desc_movel) {
-    char linha[256];
-    fgets(linha, sizeof(linha), arquivo);
-    while (fgets(linha, sizeof(linha), arquivo)) {
-        Info *info = (Info*) malloc(sizeof(Info));
-
-        char *nome = (char*) malloc(30);
-        int matricula;
-        int rank;
-        char *curso = (char*) malloc(30);
-        sscanf(linha, " %[^,],%d,%d, %[^'\n']", nome, &matricula, &rank, curso);
-
-        strcpy(info->nome, nome);
-        info->matricula = matricula;
-        info->rank = rank;
-        strcpy(info->curso, curso);
-
-        free(nome);
-        free(curso);
-
-        No *no = inicializa_no(info);
-
-        insere_na_fila_desc_movel(no, desc_movel);
-    }
-}
-
 void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
     if (!desc_movel->cauda && !desc_movel->frente) {
         desc_movel->cauda = no;
         desc_movel->frente = no;
         desc_movel->ref_movel = no;
-    }
+    }/*
     else {
-        No *aux = desc_movel->cauda;
-        
-        while (aux && rank(aux) < rank(no))
-            aux = aux->proximo;
-
-        if (!aux) {
+        if (rank(no) <= rank(desc_movel->cauda)) {
+            no->proximo = desc_movel->cauda;
+            desc_movel->cauda->antes = no;
+            desc_movel->cauda = no;
+        }
+        else if (rank(no) > rank(desc_movel->frente)) {
             no->antes = desc_movel->frente;
             desc_movel->frente->proximo = no;
             desc_movel->frente = no;
         }
-        else if (!aux->antes) {
-            no->proximo = aux;
-            aux->antes = no;
-            desc_movel->cauda = no;
-        }
-        else {
+        else if (rank(desc_movel->cauda) < rank(no) <= rank(desc_movel->ref_movel)) {
+            No *aux = desc_movel->cauda;
+        
+            while (aux && rank(aux) < rank(no))
+                aux = aux->proximo;
+
             no->proximo = aux;
             no->antes = aux->antes;
             aux->antes->proximo = no;
             aux->antes = no;
         }
-    }
+        else if (rank(desc_movel->ref_movel) < rank(no) <= rank(desc_movel->frente)) {
+            No *aux = desc_movel->ref_movel;
+        
+            while (aux && rank(aux) < rank(no))
+                aux = aux->proximo;
+                
+            no->proximo = aux;
+            no->antes = aux->antes;
+            aux->antes->proximo = no;
+            aux->antes = no;
+        }
+    }*/
 
     desc_movel->tam++;
 }

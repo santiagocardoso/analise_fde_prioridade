@@ -27,8 +27,7 @@ int main(int argc, char **argv) {
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo_desc(arquivo, desc);
-                le_arquivo_desc_movel(arquivo, desc_movel); 
+                le_arquivo(arquivo, desc, desc_movel);
 
                 int opcao = -1;
                 while (opcao != 0) {
