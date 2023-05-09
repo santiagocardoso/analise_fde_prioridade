@@ -52,33 +52,52 @@ int rank(No *no) {
     return no->data->rank;
 }
 
-// descritor sem referencia movel
-void le_arquivo_desc(FILE *arquivo, Desc *desc) {
-    char linha[256];
-    fgets(linha, sizeof(linha), arquivo);
+void cria_vetor_strings(FILE *arquivo, char strings[10002][50]) {
+    char linha[50];
+    fgets(linha, sizeof(linha), arquivo); // ignorar a primeira linha do arquivo
+    int i = 0;
     while (fgets(linha, sizeof(linha), arquivo)) {
+        strcpy(strings[i], linha);
+        i++;
+    }
+    strings[i][0] = '\0';
+}
+
+void imprime(char strings[10002][50]) {
+    int i = 0;
+    while (strings[i][0] != '\0') {
+        printf("%s", strings[i]);
+        i++;
+    }
+}
+
+void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel) {
+    int i = 0;
+    while (strings[i][0] != '\0') {
         Info *info = (Info*) malloc(sizeof(Info));
 
-        char *nome = (char*) malloc(30);
+        char nome[15];
         int matricula;
         int rank;
-        char *curso = (char*) malloc(30);
-        sscanf(linha, " %[^,],%d,%d, %[^'\n']", nome, &matricula, &rank, curso);
+        char curso[15];
+        sscanf(strings[i], "%[^,],%d,%d,%[^,\n]", nome, &matricula, &rank, curso);
 
         strcpy(info->nome, nome);
         info->matricula = matricula;
         info->rank = rank;
         strcpy(info->curso, curso);
 
-        free(nome);
-        free(curso);
+        No *no1 = inicializa_no(info);
+        No *no2 = inicializa_no(info);
 
-        No *no = inicializa_no(info);
+        insere_na_fila_desc(no1, desc);
+        insere_na_fila_desc_movel(no2, desc_movel);
 
-        insere_na_fila_desc(no, desc);
+        i++;
     }
 }
 
+// descritor sem referencia movel
 void insere_na_fila_desc(No *no, Desc *desc) {
     if (!desc->cauda && !desc->frente) {
         desc->cauda = no;
@@ -134,32 +153,6 @@ void imprime_fila_desc(Desc *desc) {
 }
 
 // descritor com referencia movel
-void le_arquivo_desc_movel(FILE *arquivo, Desc_movel *desc_movel) {
-    char linha[256];
-    fgets(linha, sizeof(linha), arquivo);
-    while (fgets(linha, sizeof(linha), arquivo)) {
-        Info *info = (Info*) malloc(sizeof(Info));
-
-        char *nome = (char*) malloc(30);
-        int matricula;
-        int rank;
-        char *curso = (char*) malloc(30);
-        sscanf(linha, " %[^,],%d,%d, %[^'\n']", nome, &matricula, &rank, curso);
-
-        strcpy(info->nome, nome);
-        info->matricula = matricula;
-        info->rank = rank;
-        strcpy(info->curso, curso);
-
-        free(nome);
-        free(curso);
-
-        No *no = inicializa_no(info);
-
-        insere_na_fila_desc_movel(no, desc_movel);
-    }
-}
-
 void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
     if (!desc_movel->cauda && !desc_movel->frente) {
         desc_movel->cauda = no;

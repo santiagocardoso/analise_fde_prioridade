@@ -5,6 +5,17 @@
 #include "fde.h"
 
 int main(int argc, char **argv) {
+    FILE *arquivo = fopen("dataset_v1.csv", "r");
+
+    if (!arquivo) {
+        printf("ERROR!\n");
+        return 0;
+    }
+
+    char strings[10002][50];
+    cria_vetor_strings(arquivo, strings);
+    // imprime(strings);
+    
     int opcao = -1;
     while (opcao != 0) {
         menu();
@@ -14,19 +25,16 @@ int main(int argc, char **argv) {
                 printf("Saindo...\n");
                 break;
             case 1:
-                FILE *arquivo1 = fopen("dataset_v1.csv", "r");
+                FILE *arquivo = fopen("dataset_v1.csv", "r");
 
-                if (!arquivo1) {
+                if (!arquivo) {
                     printf("ERROR!\n");
                     return 0;
                 }
 
-                FILE *arquivo2 = fopen("dataset_v1.csv", "r");
-
-                if (!arquivo2) {
-                    printf("ERROR!\n");
-                    return 0;
-                }
+                char strings[10002][50];
+                cria_vetor_strings(arquivo, strings);
+                imprime(strings);
 
                 Desc *desc = (Desc*) malloc(sizeof(Desc));
                 inicializa_desc(desc);
@@ -34,8 +42,7 @@ int main(int argc, char **argv) {
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo_desc(arquivo1, desc);
-                le_arquivo_desc_movel(arquivo2, desc_movel);
+                le_arquivo(strings, desc, desc_movel);
 
                 int opcao = -1;
                 while (opcao != 0) {
@@ -64,8 +71,7 @@ int main(int argc, char **argv) {
                 }
                 free(desc);
                 free(desc_movel);
-                fclose(arquivo1);
-                fclose(arquivo2);
+                fclose(arquivo);
                 break;
             default:
                 printf("Opcao invalida!\n");
