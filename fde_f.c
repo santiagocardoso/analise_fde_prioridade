@@ -73,9 +73,21 @@ void imprime(char strings[10002][50]) {
     }
 }
 
-void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel) {
+void randomize(char strings[10002][50]) {
+    srand(time(0)); 
+    for (int i = 0; i < 10002; i++) {
+        int r = random() % 10002;
+
+        char aux[50];
+        strcpy(aux, strings[i]);
+        strcpy(strings[i], strings[r]);
+        strcpy(strings[r], aux);
+    }
+}
+
+void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int casos) {
     int i = 0;
-    while (strings[i][0] != '\0') {
+    while (strings[i][0] != '\0' && i < casos) {
         Info *info = (Info*) malloc(sizeof(Info));
 
         char nome[15];

@@ -5,6 +5,8 @@
 #include "fde.h"
 
 int main(int argc, char **argv) {
+    int casos = 500;
+
     FILE *arquivo = fopen("dataset_v1.csv", "r");
 
     if (!arquivo) {
@@ -17,7 +19,7 @@ int main(int argc, char **argv) {
     // imprime(strings);
     
     int opcao = -1;
-    while (opcao != 0) {
+    while (opcao != 0 && casos <= 9000) {
         menu();
         scanf("%d", &opcao);
         switch (opcao) {
@@ -34,7 +36,8 @@ int main(int argc, char **argv) {
 
                 char strings[10002][50];
                 cria_vetor_strings(arquivo, strings);
-                imprime(strings);
+                randomize(strings);
+                // imprime(strings);
 
                 Desc *desc = (Desc*) malloc(sizeof(Desc));
                 inicializa_desc(desc);
@@ -42,7 +45,7 @@ int main(int argc, char **argv) {
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo(strings, desc, desc_movel);
+                le_arquivo(strings, desc, desc_movel, casos);
 
                 int opcao = -1;
                 while (opcao != 0) {
@@ -78,6 +81,7 @@ int main(int argc, char **argv) {
                 free(desc);
                 free(desc_movel);
                 fclose(arquivo);
+                casos += 500;
                 break;
             default:
                 printf("Opcao invalida!\n");
