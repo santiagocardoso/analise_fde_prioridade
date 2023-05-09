@@ -1,6 +1,6 @@
 typedef struct info {
-    char nome[20];
-    char curso[20];
+    char nome[15];
+    char curso[15];
     int matricula;
     int rank;
 } Info;
@@ -33,8 +33,10 @@ No* inicializa_no(Info *info);
 
 int rank(No *no);
 
-void le_arquivo_desc(FILE *arquivo, Desc *desc);
-void le_arquivo_desc_movel(FILE *arquivo, Desc_movel *desc_movel);
+void cria_vetor_strings(FILE *arquivo, char strings[10002][50]);
+void imprime(char strings[10002][50]);
+
+void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel);
 
 void insere_na_fila_desc(No *no, Desc *desc);
 void remover_da_fila_desc(Desc *desc);
