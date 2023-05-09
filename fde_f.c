@@ -22,8 +22,10 @@ void menu_desc() {
     printf("[0] Sair\n");
     printf("[1] Mostrar fila\n");
     printf("[2] Remover da fila\n");
-    printf("[3] Mostrar fila movel\n");
-    printf("[4] Remover da fila movel\n");
+    printf("[3] Reiniciar fila\n");
+    printf("[4] Mostrar fila movel\n");
+    printf("[5] Remover da fila movel\n");
+    printf("[6] Reiniciar fila movel\n");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
 
@@ -152,6 +154,20 @@ void imprime_fila_desc(Desc *desc) {
     }
 }
 
+void reiniciar_fila_desc(Desc *desc) {
+    if (!desc->frente) {
+        printf("Fila vazia!\n");
+        return;
+    }
+    No *aux = desc->frente;
+    while (aux) {
+        desc->frente = aux->antes;
+        free(aux);
+        aux = desc->frente;
+    }
+    desc->frente = NULL;
+}
+
 // descritor com referencia movel
 void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
     if (!desc_movel->cauda && !desc_movel->frente) {
@@ -218,4 +234,18 @@ void imprime_fila_desc_movel(Desc_movel *desc_movel) {
         printf("%s,%d,%d,%s\n", aux->data->nome, aux->data->matricula, aux->data->rank, aux->data->curso);
         aux = aux->antes;
     }
+}
+
+void reiniciar_fila_desc_movel(Desc_movel *desc_movel) {
+    if (!desc_movel->frente) {
+        printf("Fila vazia!\n");
+        return;
+    }
+    No *aux = desc_movel->frente;
+    while (aux) {
+        desc_movel->frente = aux->antes;
+        free(aux);
+        aux = desc_movel->frente;
+    }
+    desc_movel->frente = NULL;
 }

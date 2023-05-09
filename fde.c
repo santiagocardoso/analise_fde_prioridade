@@ -59,10 +59,16 @@ int main(int argc, char **argv) {
                             remover_da_fila_desc(desc);
                             break;
                         case 3:
-                            imprime_fila_desc_movel(desc_movel);
+                            reiniciar_fila_desc(desc);
                             break;
                         case 4:
+                            imprime_fila_desc_movel(desc_movel);
+                            break;
+                        case 5:
                             remover_da_fila_desc_movel(desc_movel);
+                            break;
+                        case 6:
+                            reiniciar_fila_desc_movel(desc_movel);
                             break;
                         default:
                             printf("Opcao invalida!\n");
