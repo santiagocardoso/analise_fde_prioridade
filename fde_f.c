@@ -85,7 +85,7 @@ void randomize(char strings[10002][50]) {
     }
 }
 
-void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int casos) {
+void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int casos, double *tempo1, double *tempo2) {
     int i = 0;
     while (strings[i][0] != '\0' && i < casos) {
         Info *info = (Info*) malloc(sizeof(Info));
@@ -104,8 +104,15 @@ void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int
         No *no1 = inicializa_no(info);
         No *no2 = inicializa_no(info);
 
+        clock_t tic1 = clock();
         insere_na_fila_desc(no1, desc);
+        clock_t tac1 = clock();
+        *tempo1 += (double)(tac1 - tic1) / CLOCKS_PER_SEC;
+
+        clock_t tic2 = clock();
         insere_na_fila_desc_movel(no2, desc_movel);
+        clock_t tac2 = clock();
+        *tempo2 += (double)(tac2 - tic2) / CLOCKS_PER_SEC;
 
         i++;
     }
@@ -192,33 +199,71 @@ void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
             no->proximo = desc_movel->cauda;
             desc_movel->cauda->antes = no;
             desc_movel->cauda = no;
+            desc_movel->ref_movel = no;
         }
         else if (rank(no) > rank(desc_movel->frente)) {
             no->antes = desc_movel->frente;
             desc_movel->frente->proximo = no;
             desc_movel->frente = no;
+            desc_movel->ref_movel = no;
         }
         else if (rank(desc_movel->cauda) < rank(no) <= rank(desc_movel->ref_movel)) {
-            No *aux = desc_movel->cauda;
-        
-            while (aux && rank(aux) < rank(no))
-                aux = aux->proximo;
+            int deltaA = abs(rank(desc_movel->cauda) - rank(no));
+            int deltaB = abs(rank(desc_movel->ref_movel) - rank(no));
 
-            no->proximo = aux;
-            no->antes = aux->antes;
-            aux->antes->proximo = no;
-            aux->antes = no;
+            if (deltaA < deltaB) {
+                No *aux = desc_movel->cauda;
+
+                while (aux && rank(aux) < rank(no))
+                    aux = aux->proximo;
+
+                no->proximo = aux;
+                no->antes = aux->antes;
+                aux->antes->proximo = no;
+                aux->antes = no;
+                desc_movel->ref_movel = no;
+            }
+            else {
+                No *aux = desc_movel->ref_movel;
+
+                while (aux && rank(aux) > rank(no) - 1)
+                    aux = aux->antes;
+
+                no->proximo = aux->proximo;
+                no->antes = aux;
+                aux->proximo->antes = no;
+                aux->proximo = no;
+                desc_movel->ref_movel = no;
+            }
         }
         else if (rank(desc_movel->ref_movel) < rank(no) <= rank(desc_movel->frente)) {
-            No *aux = desc_movel->ref_movel;
+            int deltaC = abs(rank(desc_movel->frente) - rank(no));
+            int deltaD = abs(rank(desc_movel->ref_movel) - rank(no));
+
+            if (deltaC < deltaD) {
+                No *aux = desc_movel->frente;
         
-            while (aux && rank(aux) < rank(no))
-                aux = aux->proximo;
-                
-            no->proximo = aux;
-            no->antes = aux->antes;
-            aux->antes->proximo = no;
-            aux->antes = no;
+                while (aux && rank(aux) > rank(no) - 1)
+                    aux = aux->antes;
+
+                no->proximo = aux->proximo;
+                no->antes = aux;
+                aux->proximo->antes = no;
+                aux->proximo = no;
+                desc_movel->ref_movel = no;
+            }
+            else {
+                No *aux = desc_movel->ref_movel;
+        
+                while (aux && rank(aux) < rank(no))
+                    aux = aux->proximo;
+                    
+                no->proximo = aux;
+                no->antes = aux->antes;
+                aux->antes->proximo = no;
+                aux->antes = no;
+                desc_movel->ref_movel = no;
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <time.h>
 #include "fde.h"
 
@@ -16,7 +17,6 @@ int main(int argc, char **argv) {
 
     char strings[10002][50];
     cria_vetor_strings(arquivo, strings);
-    // imprime(strings);
     
     int opcao = -1;
     while (opcao != 0 && casos <= 9000) {
@@ -27,25 +27,18 @@ int main(int argc, char **argv) {
                 printf("Saindo...\n");
                 break;
             case 1:
-                FILE *arquivo = fopen("dataset_v1.csv", "r");
-
-                if (!arquivo) {
-                    printf("ERROR!\n");
-                    return 0;
-                }
-
-                char strings[10002][50];
-                cria_vetor_strings(arquivo, strings);
-                randomize(strings);
-                // imprime(strings);
-
                 Desc *desc = (Desc*) malloc(sizeof(Desc));
                 inicializa_desc(desc);
 
                 Desc_movel *desc_movel = (Desc_movel*) malloc(sizeof(Desc_movel));
                 inicializa_desc_movel(desc_movel);
 
-                le_arquivo(strings, desc, desc_movel, casos);
+                randomize(strings);
+
+                double tempo1 = 0, tempo2 = 0;
+                le_arquivo(strings, desc, desc_movel, casos, &tempo1, &tempo2);
+
+                printf("Numero de casos: %d\nTempo1: %lf\nTempo2: %lf\n", casos, tempo1, tempo2);
 
                 int opcao = -1;
                 while (opcao != 0) {
@@ -80,7 +73,6 @@ int main(int argc, char **argv) {
                 }
                 free(desc);
                 free(desc_movel);
-                fclose(arquivo);
                 casos += 500;
                 break;
             default:
@@ -88,6 +80,8 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+
+    fclose(arquivo);
 
     return 0;
 }

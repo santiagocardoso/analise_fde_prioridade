@@ -37,7 +37,7 @@ void cria_vetor_strings(FILE *arquivo, char strings[10002][50]);
 void imprime(char strings[10002][50]);
 void randomize(char strings[10002][50]);
 
-void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int casos);
+void le_arquivo(char strings[10002][50], Desc *desc, Desc_movel *desc_movel, int casos, double *tempo1, double *tempo2);
 
 void insere_na_fila_desc(No *no, Desc *desc);
 void remover_da_fila_desc(Desc *desc);
