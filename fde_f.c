@@ -207,7 +207,7 @@ void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
             desc_movel->frente = no;
             desc_movel->ref_movel = no;
         }
-        else if (rank(desc_movel->cauda) < rank(no) <= rank(desc_movel->ref_movel)) {
+        else if (rank(desc_movel->cauda) < rank(no) && rank(no) <= rank(desc_movel->ref_movel)) {
             int deltaA = abs(rank(desc_movel->cauda) - rank(no));
             int deltaB = abs(rank(desc_movel->ref_movel) - rank(no));
 
@@ -236,7 +236,7 @@ void insere_na_fila_desc_movel(No *no, Desc_movel *desc_movel) {
                 desc_movel->ref_movel = no;
             }
         }
-        else if (rank(desc_movel->ref_movel) < rank(no) <= rank(desc_movel->frente)) {
+        else if (rank(desc_movel->ref_movel) < rank(no) && rank(no) <= rank(desc_movel->frente)) {
             int deltaC = abs(rank(desc_movel->frente) - rank(no));
             int deltaD = abs(rank(desc_movel->ref_movel) - rank(no));
 
